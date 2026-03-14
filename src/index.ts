@@ -1,6 +1,8 @@
 import { Elysia } from "elysia";
 import { swagger } from "@elysiajs/swagger";
 import { requestLoggerPlugin } from "./plugins/requestLogger";
+import { aqiPlugin } from "./modules/aqi/index";
+import { openWeatherPlugin } from "./modules/openweather/index";
 
 const app = new Elysia()
   .use(
@@ -15,6 +17,7 @@ const app = new Elysia()
     })
   )
   .use(requestLoggerPlugin)
+  .group("/api/v1", (app) => app.use(aqiPlugin).use(openWeatherPlugin))
   .get("/", ({ logger }) => {
     logger.info("handling health check");
     return { status: "ok" };
