@@ -21,7 +21,7 @@ function buildKafkaClient(): Kafka | null {
   return new Kafka({
     clientId: "hubble",
     brokers: [`${broker}:${port}`],
-    logLevel: 1, // WARN only
+    logLevel: 0, // silence KafkaJS internal logger — errors are handled via try/catch
   });
 }
 

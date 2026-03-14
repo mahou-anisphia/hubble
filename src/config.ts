@@ -12,7 +12,7 @@ export const config = {
     apiEndpoint: process.env.AQAIR_API_ENDPOINT,
   },
   openWeather: {
-    apiKey: process.env.VITE_OPENWEATHER_API_KEY,
-    apiEndpoint: process.env.VITE_OPENWEATHER_API_ENDPOINT,
+    apiKey: process.env.OPENWEATHER_API_KEY,
+    apiEndpoint: process.env.OPENWEATHER_API_ENDPOINT,
   },
 } as const;

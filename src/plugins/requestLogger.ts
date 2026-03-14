@@ -23,4 +23,5 @@ export const requestLoggerPlugin = new Elysia({ name: "request-logger" })
       path: url.pathname,
       status: response instanceof Response ? response.status : 200,
     });
-  });
+  })
+;

@@ -6,14 +6,18 @@ import { publishToKafka } from "../../lib/kafka";
 import { makeCacheKey, OPENWEATHER_PRECISION } from "../../utils/geo";
 import { config } from "../../config";
 import { requestLoggerPlugin } from "../../plugins/requestLogger";
+import { MissingConfigError } from "../../lib/errors";
 import type { OpenWeather } from "./types";
 
 const TTL_SECONDS = 600; // 10 minutes
 
 async function fetchOpenWeather(lat: number, lon: number): Promise<OpenWeather> {
+  if (!config.openWeather.apiEndpoint || !config.openWeather.apiKey) {
+    throw new MissingConfigError("OpenWeather API (OPENWEATHER_API_ENDPOINT / OPENWEATHER_API_KEY)");
+  }
   const { data } = await axios.get<OpenWeather>(
     `https://${config.openWeather.apiEndpoint}/data/2.5/weather`,
-    { params: { lat, lon, appid: config.openWeather.apiKey, units: "metric" } }
+    { params: { lat, lon, appid: config.openWeather.apiKey, units: "metric" }, timeout: 5000 }
   );
   return data;
 }
