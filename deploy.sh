@@ -7,6 +7,7 @@ HOST_PORT=3000
 CONTAINER_PORT=3000
 
 ENV_KEYS=(
+  PORT
   REDIS_ENDPOINT
   REDIS_PORT
   KAFKA_ENDPOINT
@@ -18,6 +19,7 @@ ENV_KEYS=(
 )
 
 ENV_DESCS=(
+  "HTTP port the server listens on (default: 3000)"
   "Redis host"
   "Redis port"
   "Kafka broker host"
@@ -172,6 +174,9 @@ echo "Build complete."
 # ── Run ────────────────────────────────────────────────────────────────────────
 
 echo ""
+# If PORT was supplied via env file / manual input, honour it for the host binding too
+[[ -n "${env_values[PORT]:-}" ]] && HOST_PORT="${env_values[PORT]}"
+
 echo "Starting '$CONTAINER_NAME' on port $HOST_PORT..."
 
 mapfile -t env_flags < <(build_env_flags)
