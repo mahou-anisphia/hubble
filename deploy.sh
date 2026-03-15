@@ -174,8 +174,11 @@ echo "Build complete."
 # ── Run ────────────────────────────────────────────────────────────────────────
 
 echo ""
-# If PORT was supplied via env file / manual input, honour it for the host binding too
-[[ -n "${env_values[PORT]:-}" ]] && HOST_PORT="${env_values[PORT]}"
+# If PORT was supplied via env file / manual input, sync both sides of the -p binding
+if [[ -n "${env_values[PORT]:-}" ]]; then
+  HOST_PORT="${env_values[PORT]}"
+  CONTAINER_PORT="${env_values[PORT]}"
+fi
 
 echo "Starting '$CONTAINER_NAME' on port $HOST_PORT..."
 
