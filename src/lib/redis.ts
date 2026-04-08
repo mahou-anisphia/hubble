@@ -78,3 +78,14 @@ export async function deleteFromRedis(key: string): Promise<void> {
     console.error("[redis] deleteFromRedis error:", (err as Error).message);
   }
 }
+
+export async function pingRedis(): Promise<boolean> {
+  try {
+    const client = await getRedisClient();
+    if (!client) return false;
+    const reply = await client.ping();
+    return reply === "PONG";
+  } catch {
+    return false;
+  }
+}

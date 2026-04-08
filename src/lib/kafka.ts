@@ -9,7 +9,7 @@ export const KAFKA_TOPICS = ["hubble-aqi", "hubble-openweather"] as const;
 let producer: Producer | null = null;
 let topicsEnsured = false;
 
-function buildKafkaClient(): Kafka | null {
+export function buildKafkaClient(): Kafka | null {
   const broker = config.kafka.endpoint;
   const port = config.kafka.port;
 
@@ -81,6 +81,20 @@ export async function publishToKafka(
   } catch (err) {
     console.error("[kafka] publishToKafka error:", { topic, message: (err as Error).message });
     producer = null; // reset so next call retries connection
+    return false;
+  }
+}
+
+export async function pingKafka(): Promise<boolean> {
+  const kafka = buildKafkaClient();
+  if (!kafka) return false;
+  const admin = kafka.admin();
+  try {
+    await admin.connect();
+    await admin.listTopics();
+    await admin.disconnect();
+    return true;
+  } catch {
     return false;
   }
 }

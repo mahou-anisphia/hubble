@@ -3,7 +3,7 @@ import { createLogger } from "../logger";
 
 export const requestLoggerPlugin = new Elysia({ name: "request-logger" })
   .derive({ as: "global" }, () => {
-    const requestId = crypto.randomUUID();
+    const requestId = `${new Date().toISOString()}_${crypto.randomUUID()}`;
     return {
       logger: createLogger({ requestId }),
       requestId,
